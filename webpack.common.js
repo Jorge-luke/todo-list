@@ -12,7 +12,15 @@ module.exports = {
     }),
   ],
 
-  module: {
+
+
+  output: {
+    filename: "main.js",
+    path: path.resolve(__dirname, "dist"),
+    clean: true,
+  },
+
+    module: {
     rules: [
       {
       test: /\.html$/i,
@@ -27,12 +35,6 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
     ],
-  },
-
-  output: {
-    filename: "main.js",
-    path: path.resolve(__dirname, "dist"),
-    clean: true,
   },
 
 };
