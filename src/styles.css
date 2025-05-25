@@ -53,3 +53,14 @@ body {
     font-size: 3rem;
     flex: 2;
 }
+
+
+/* -------------
+Task Box
+------------- */
+
+.task-creation {
+    width: 10rem;
+    height: 10rem;
+    border: 0.2rem solid purple;
+}

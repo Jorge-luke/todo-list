@@ -1,9 +1,41 @@
 export function project () {
 
-function createTodo() {
-    const todoCreation = document.createElement('div');
+function createInput(labelText, type, name, placeholder){
+    const wrapper = document.createElement('div');
+
+    const label = document.createElement('label');
+    label.textContent = labelText;
+    label.setAttribute('for', name);
     
-}
+    const input = document.createElement('input');
+    input.type = type;
+    input.name = name;
+
+    if (placeholder != undefined){
+    input.setAttribute("placeholder", placeholder);
+    };
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+
+
+    return wrapper;
+   }
+
+function createTask() {
+    if (isCreating == false){
+        
+    const taskCreation = document.createElement('div');
+    taskCreation.classList.add('task-creation');
+    elementBox.appendChild(taskCreation);
+    isCreating = true;
+
+
+
+    const checklistInput = createInput("checklist?",'text',"checklist", "undfdsfds");
+    taskCreation.appendChild(checklistInput);
+    };
+};
 
 //Project
 
@@ -36,7 +68,11 @@ taskBottom.id = 'task-bottom';
 taskBottom.textContent = "+";
 taskBox.appendChild(taskBottom);
 
-taskBottom.addEventListener("click", createTodo);
+const elementBox = document.createElement('div');
+elementBox.id = 'element-box';
+projectItem.appendChild(elementBox);
 
+let isCreating = false;
+taskBottom.addEventListener("click", createTask);
 
 };

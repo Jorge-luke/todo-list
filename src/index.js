@@ -1,5 +1,6 @@
 import "./styles.css";
 console.log("index.js Test")
+import { project } from "./project.js";
 
 
 const container = document.querySelector('#container');
@@ -30,7 +31,7 @@ const content = document.createElement('div');
 content.id = 'content';
 container.appendChild(content);
 
-import { project } from "./project.js";
+
 project();
 
 
