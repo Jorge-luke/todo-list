@@ -1,66 +1,41 @@
+:root{
+    font-size: 2rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 body {
     background-color: grey;
 }
 
-#container {
-    display: flex;
-    flex-direction: column;
-    width: 90vw;
+button {
+    width: 2rem;
+    height: 2rem;
 }
 
 #container {
-    margin: 0px;
+    border: 2px solid orange;
 }
 
-#nav {
+#page-title {
+    text-align: center;
+}
+
+#nav-top-text {
+    text-align: center;
+}
+
+#nav-bottom {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#content {
-    background-color: azure;
-    width: 90vw ;
-    height: 90vh ;
-    margin-left: 0px;
+.project-select {
+    margin: 0px;
     padding: 0px;
 }
 
-#project {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#task-box {
-    width: 30vw;
-    height: 5rem;
-    background-color: blue;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-#task-top {
-    background-color: aqua;
-    flex: 1;
-
-}
-
-#task-bottom {
-    background-color: red;
-    color: yellow;
-    font-size: 3rem;
-    flex: 2;
-}
-
-
-/* -------------
-Task Box
-------------- */
-
-.task-creation {
-    width: 10rem;
+.project-content {
     height: 10rem;
-    border: 0.2rem solid purple;
+    background-color: blue;
 }

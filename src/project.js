@@ -1,78 +1,34 @@
-export function project () {
+import { projectState } from "./new-project";
 
-function createInput(labelText, type, name, placeholder){
-    const wrapper = document.createElement('div');
+export class Project {
+    constructor(id, title){
+        this.cards = [];
+        this.id = id;
+        this.title = title
+    }
 
-    const label = document.createElement('label');
-    label.textContent = labelText;
-    label.setAttribute('for', name);
-    
-    const input = document.createElement('input');
-    input.type = type;
-    input.name = name;
+    showProject(){
+        const content = document.querySelector('#content');
 
-    if (placeholder != undefined){
-    input.setAttribute("placeholder", placeholder);
-    };
+        if(projectState.currentProject != `${this.id}`){
+            while(content.firstChild){
+                content.removeChild(content.firstChild);
+            }
+            const projectContainer = document.createElement('div');
+            projectContainer.id = `${this.id}`;
+            projectContainer.classList.add("project-container");
+            content.appendChild(projectContainer);
 
-    wrapper.appendChild(label);
-    wrapper.appendChild(input);
+            const projectTop = document.createElement('div');
+            projectTop.classList.add('project-top-title');
+            projectTop.textContent = `${this.title}`;
+            projectContainer.appendChild(projectTop);
 
+            const projectContent = document.createElement('div');
+            projectContent.classList.add('project-content');
+            projectContainer.appendChild(projectContent);
 
-    return wrapper;
-   }
-
-function createTask() {
-    if (isCreating == false){
-        
-    const taskCreation = document.createElement('div');
-    taskCreation.classList.add('task-creation');
-    elementBox.appendChild(taskCreation);
-    isCreating = true;
-
-
-
-    const checklistInput = createInput("checklist?",'text',"checklist", "undfdsfds");
-    taskCreation.appendChild(checklistInput);
-    };
-};
-
-//Project
-
-const projectItem = document.createElement('div');
-projectItem.id = 'project'
-
-const content = document.querySelector('#content');
-content.appendChild(projectItem);
-
-//create buttom to create todo card
-//for each card
-    //text-content
-    //add due date
-    //add check-box
-    //add delete btn
-    //add edit btn
-
-const taskBox = document.createElement('div');
-taskBox.id = 'task-box';
-projectItem.appendChild(taskBox);
-
-const taskTop = document.createElement('div');
-taskTop.id = 'task-top';
-taskTop.textContent = "New Item"
-taskBox.appendChild(taskTop);
-
-
-const taskBottom = document.createElement('button');
-taskBottom.id = 'task-bottom';
-taskBottom.textContent = "+";
-taskBox.appendChild(taskBottom);
-
-const elementBox = document.createElement('div');
-elementBox.id = 'element-box';
-projectItem.appendChild(elementBox);
-
-let isCreating = false;
-taskBottom.addEventListener("click", createTask);
-
-};
+        projectState.currentProject = `${this.id}`;
+        }
+    }
+}
