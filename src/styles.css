@@ -39,3 +39,9 @@ button {
     height: 10rem;
     background-color: blue;
 }
+
+#card-creator-container {
+    height: 5rem;
+    width: 5rem;
+    background-color: bisque;
+}

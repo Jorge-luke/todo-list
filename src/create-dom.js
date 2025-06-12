@@ -1,5 +1,8 @@
 import { Project } from "./project.js"
 import { projectState } from "./new-project";
+import { renderProject } from "./project.js";
+import { deleteProjectBtn } from "./new-project";
+import { addCreateCardBtn } from "./cards.js";
 
 export function createDOM(){
     const container = document.getElementById('container');
@@ -21,7 +24,7 @@ export function createDOM(){
     navTopText.id = "nav-top-text"
     navTopText.textContent = "PROJECTS: "
     navTop.appendChild(navTopText);
-
+    
     const navBottom = document.createElement('div');
     navBottom.id = "nav-bottom";
     nav.appendChild(navBottom);
@@ -33,7 +36,7 @@ export function createDOM(){
     const defaultProject = document.createElement('button');
     defaultProject.classList.add('project-select');
     defaultProject.id = "default-project";
-    defaultProject.textContent = "Project-one";
+    defaultProject.textContent = "Project One";
     projectMenu.appendChild(defaultProject);
 
     const newProjectBtn = document.createElement('button');
@@ -45,20 +48,23 @@ export function createDOM(){
     content.id = "content";
     container.appendChild(content);
 
-    const projectContainer = document.createElement('div');
-    projectContainer.id = "project-content"
+    insertDefaultProject();
+    deleteProjectBtn(defaultProject, projectMenu);
 }
 
 export function insertDefaultProject(){
-    let currentProject = 0;
-
     const defaultProjectBtn = document.getElementById('default-project');
     
-    defaultProjectBtn.addEventListener("click", function showProjectDOM (event) {
-        if(projectState.currentProject != event.target.id){
-            let project1 = new Project ("default-project", "Project One");
-            project1.showProject();
-            projectState.currentProject = `${event.target.id}`;
-        }
-    })
+    if(projectState.currentProject != `${defaultProjectBtn.id}`){
+    const defaultProject = new Project (`${defaultProjectBtn.id}`, `${defaultProjectBtn.textContent}`);
+    renderProject(defaultProject);
+    }
+
+}
+
+export function clickDefaultProject(){
+    const defaultProject = document.getElementById('default-project');
+    defaultProject.addEventListener('click', () => {
+    insertDefaultProject();
+});
 }
