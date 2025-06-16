@@ -2,7 +2,6 @@ import { Project } from "./project.js"
 import { projectState } from "./new-project";
 import { renderProject } from "./project.js";
 import { deleteProjectBtn } from "./new-project";
-import { addCreateCardBtn } from "./cards.js";
 
 export function createDOM(){
     const container = document.getElementById('container');

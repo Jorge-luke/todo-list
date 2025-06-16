@@ -36,12 +36,22 @@ button {
 }
 
 .project-content {
-    height: 10rem;
+    height: fit-content;
     background-color: blue;
 }
 
 #card-creator-container {
-    height: 5rem;
+    height: fit-content;
     width: 5rem;
     background-color: bisque;
+}
+
+.card-body {
+    height: fit-content;
+    background-color: lightblue;
+    border: 1px solid purple;
+}
+
+.item {
+    display: flex;
 }

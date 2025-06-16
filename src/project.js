@@ -33,15 +33,23 @@ export function renderProject(project){
             projectTop.textContent = `${project.title}`;
             projectContainer.appendChild(projectTop);
 
+            const cardCreatorContainer = document.createElement('div');
+            cardCreatorContainer.id = "card-creator-container";
+            projectContainer.appendChild(cardCreatorContainer);
+            // create container between title and container to always fit card creator popup 
+
+
             const projectContent = document.createElement('div');
             projectContent.classList.add('project-content');
             projectContainer.appendChild(projectContent);
 
-            addCreateCardBtn(projectContainer);
+            addCreateCardBtn(cardCreatorContainer);
         
 
         projectState.currentProject = `${project.id}`;
         console.log(project)
+
+        
         
 
     }

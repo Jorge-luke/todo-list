@@ -9,7 +9,6 @@ const projectIds = ["default-project"];
 export function newProjectBtn (){
     const newProjectBtn = document.querySelector('#new-project-btn');
     newProjectBtn.addEventListener('click', () => {
-
         if(document.querySelector('#new-project-wrapper')){
             const newProjectWrapper = document.querySelector('#new-project-wrapper');
             newProjectWrapper.remove();
