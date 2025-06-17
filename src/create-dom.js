@@ -32,11 +32,27 @@ export function createDOM(){
     projectMenu.id = "project-menu";
     navBottom.appendChild(projectMenu);
 
-    const defaultProject = document.createElement('button');
-    defaultProject.classList.add('project-select');
-    defaultProject.id = "default-project";
-    defaultProject.textContent = "Project One";
-    projectMenu.appendChild(defaultProject);
+//
+//
+//
+//
+//
+//
+///
+///////
+///////
+////////
+/////
+////
+//
+//
+    //
+    // Create the default project with functions, without manually appending it to the DOM!
+    // const defaultProject = document.createElement('button');
+    // defaultProject.classList.add('project-select');
+    // defaultProject.id = "default-project";
+    // defaultProject.textContent = "Project One";
+    // projectMenu.appendChild(defaultProject);
 
     const newProjectBtn = document.createElement('button');
     newProjectBtn.id = "new-project-btn";

@@ -107,8 +107,6 @@ function createCardPopUp(){
     
 }
 
-
-
 function createCard(cardTitleValue, project){
     const container = document.querySelector('.project-content');
     const card = new Card(cardTitleValue, project);

@@ -35,6 +35,11 @@ button {
     padding: 0px;
 }
 
+#input-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 .project-content {
     height: fit-content;
     background-color: blue;

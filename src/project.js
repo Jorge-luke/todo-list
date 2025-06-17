@@ -1,13 +1,17 @@
 import { addCreateCardBtn } from "./cards";
 import { projectState } from "./new-project";
+import { projectsHandler } from "./new-project";
 
 export class Project {
-    constructor(id, title){
-        this.cards = [];
+    constructor(id, title, description, priority){
         this.id = id;
         this.title = title
+        this.description = description;
+        this.priority = priority;
+        this.cards = [];
     }
 }
+
 
 
 
@@ -47,10 +51,6 @@ export function renderProject(project){
         
 
         projectState.currentProject = `${project.id}`;
-        console.log(project)
-
-        
-        
-
+        console.log(project);
     }
 }
