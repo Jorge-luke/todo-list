@@ -136,6 +136,3 @@ function getDragAfterElement(container, y) {
 }
 }
 
-function getProject(){
-  
-}

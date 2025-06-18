@@ -5,7 +5,7 @@ import { newProjectBtn } from "./new-project.js";
 import { clickDefaultProject } from "./create-dom";
 
 createDOM();
-newProjectBtn();
-insertDefaultProject();
-clickDefaultProject();
+// newProjectBtn();
+// insertDefaultProject();
+// clickDefaultProject();
 

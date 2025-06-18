@@ -9,7 +9,7 @@ export const projectsHandler = [];
 window.projectsHandler = projectsHandler;
 
 
-export function newProjectBtn (){
+export function createNewProjectBtn (){
     const newProjectBtn = document.querySelector('#new-project-btn');
 
     newProjectBtn.addEventListener('click', () => {
@@ -18,8 +18,6 @@ export function newProjectBtn (){
             newProjectWrapper.remove();
         } else {
 
-
-    
     const container = document.createElement('div');
     container.id = "new-project-wrapper";
     document.querySelector('#nav-bottom').appendChild(container);
@@ -57,92 +55,81 @@ export function newProjectBtn (){
     })
 
     addProjectBtn.addEventListener("click", () => {
-
     const title = document.querySelector("#new-project-title").value;
     const id = getTitleToID(title);
     const description = document.querySelector("#new-project-description").value;
     const priority = document.querySelector("#new-project-priority").value;
-    addProjectOnMenu(id, title, description, priority);
+    const project = new Project(id, title, description, priority);
+    addProjectOnMenu(project, id, title, description, priority);
     switchFocus(ProjectInputTitle);
+
         })
     }
     });
 }
 
-export function addProjectOnMenu(id, title, description, priority) {
-    // let projectInput = document.querySelector("#new-project-title");
-    // const projectID = getTitleToID(projectInput.value);
-    const projectID = id;
-    // const projectTitle = projectInput.value; 
-    const projectTitle = title;
-
-    // const projectDescriptionInput = document.querySelector("#new-project-description");
-    // const projectDescription = getTitleToID(projectDescriptionInput.value);
-
-    const projectDescription = description;
-
-    // const projectPriorityInput = document.querySelector("#new-project-priority");
-    // const projectPriority = getTitleToID(projectPriorityInput.value);
-
-    const projectPriority = priority;
-    
-    const projectBtn = document.createElement('button');
-    // projectBtn.textContent = `${projectInput.value}`;
-    projectBtn.textContent = projectTitle;
-    projectBtn.classList.add('project-select');
-    
-    // projectBtn.id = `${projectInput.value}-project`;
-    projectBtn.id = `${projectDescription}-btn`;
-        
-    const projectMenu = document.querySelector('#project-menu');
+export function addProjectOnMenu(project, projectID, title, description, priority) {
 
     const projectWrapper = document.createElement('div');
     projectWrapper.id = `${projectID}-btn-wrapper`;
     projectWrapper.classList.add('project-btn-wrapper');
+
+    const projectMenu = document.querySelector('#project-menu');
     projectMenu.appendChild(projectWrapper);
-
-
+    
+ 
+    
+    const projectBtn = document.createElement('button');
+    projectBtn.id = projectID;
+    projectBtn.classList.add('project-select');
+    projectBtn.textContent = title;
     projectWrapper.appendChild(projectBtn);
 
+    const projectDescription = description;
+
+    const projectPriority = document.createElement('div');
+    projectPriority.id = `${projectID}-btn-priority`;
+    projectPriority.classList.add('project-btn-priority');
+    projectPriority.textContent = `Priority: ${priority}`;
+    projectWrapper.appendChild(projectPriority);
+
+    
 
     deleteProjectBtn(projectBtn, projectWrapper);
 
-    projectBtn.addEventListener("click", () => {
 
-        const project = new Project(projectID, projectTitle, projectDescription, projectPriority);
+    projectBtn.addEventListener("click", () => {
         if(!projectsHandler.includes(project)){
         projectsHandler.push(project);
         renderProject(project);
         } else {
-            renderProject(project);
+            renderProject(project, projectID, title, description, priority);
         }
     })
 
-    // projectInput.value = "";
 }
 
-export function deleteProjectBtn(project, container) {
+export function deleteProjectBtn(project, projectWrapper) {
     const deleteBtn = document.createElement('button');
     deleteBtn.setAttribute('name', `${project.id}`);
     deleteBtn.id = `${project.id}-delete`
 
-    container.appendChild(deleteBtn);
+    projectWrapper.appendChild(deleteBtn);
 
     deleteBtn.addEventListener('click', () => {
-        deleteProject(project, container);
-
-    })
+        deleteProject(project, projectWrapper);
+    });
 }
 
-export function deleteProject (project, container) {
-    container.removeChild(project);
-    const deleteBtn = document.getElementById(`${project.id}-delete`);
-    container.removeChild(deleteBtn);
+export function deleteProject (project, projectWrapper) {
+    const projectMenu = document.getElementById("project-menu");
+    projectMenu.removeChild(projectWrapper);
     
+
     const content = document.getElementById('content');
     const projectContent = document.getElementById(`${project.id}-container`);
 
     if(projectContent && content.contains(projectContent)){
-    content.removeChild(content.firstChild);
+    content.removeChild(projectContent);
     }
 }

@@ -1,5 +1,5 @@
 import { Project } from "./project.js"
-import { projectState } from "./new-project";
+import { addProjectOnMenu, createNewProjectBtn, projectState } from "./new-project";
 import { renderProject } from "./project.js";
 import { deleteProjectBtn } from "./new-project";
 
@@ -32,54 +32,28 @@ export function createDOM(){
     projectMenu.id = "project-menu";
     navBottom.appendChild(projectMenu);
 
-//
-//
-//
-//
-//
-//
-///
-///////
-///////
-////////
-/////
-////
-//
-//
-    //
-    // Create the default project with functions, without manually appending it to the DOM!
-    // const defaultProject = document.createElement('button');
-    // defaultProject.classList.add('project-select');
-    // defaultProject.id = "default-project";
-    // defaultProject.textContent = "Project One";
-    // projectMenu.appendChild(defaultProject);
+    const defaultProject = new Project("default-project", "Default Project", "This is the default project", "01");
+
+    const projectID = defaultProject.id;
+    const title = defaultProject.title;
+    const description = defaultProject.description;
+    const priority = defaultProject.priority;
+    
+    addProjectOnMenu(defaultProject, projectID, title, description, priority);
 
     const newProjectBtn = document.createElement('button');
     newProjectBtn.id = "new-project-btn";
     navBottom.appendChild(newProjectBtn);
+    createNewProjectBtn();
 
 
     const content = document.createElement('div');
     content.id = "content";
     container.appendChild(content);
-
-    insertDefaultProject();
-    deleteProjectBtn(defaultProject, projectMenu);
-}
-
-export function insertDefaultProject(){
-    const defaultProjectBtn = document.getElementById('default-project');
-    
-    if(projectState.currentProject != `${defaultProjectBtn.id}`){
-    const defaultProject = new Project (`${defaultProjectBtn.id}`, `${defaultProjectBtn.textContent}`);
-    renderProject(defaultProject);
-    }
-
-}
-
-export function clickDefaultProject(){
-    const defaultProject = document.getElementById('default-project');
-    defaultProject.addEventListener('click', () => {
-    insertDefaultProject();
-});
+            if(!projectsHandler.includes(defaultProject)){
+            projectsHandler.push(defaultProject);
+            renderProject(defaultProject, projectID, title, description, priority);
+            } else {
+                renderProject(defaultProject, projectID, title, description, priority);
+            }
 }
