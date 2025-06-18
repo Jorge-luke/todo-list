@@ -135,4 +135,3 @@ function getDragAfterElement(container, y) {
   ).element;
 }
 }
-
