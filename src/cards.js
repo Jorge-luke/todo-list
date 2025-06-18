@@ -54,7 +54,6 @@ function createCardPopUp(){
     makeInput ("", "text", "card-title-input", "card-title-input", "card title", cardCreator, "card-title-input", "none");
     //
 
-
     // after selecting one option, focus on input for card title
     const radios = document.querySelectorAll('.card-creator-input');
     radios.forEach((element) => {
@@ -87,8 +86,6 @@ function createCardPopUp(){
             alert('Choose the type of card!');
         }
     }
-
-
 }
 
     const cardTitleInput = cardCreator.querySelector('#card-title-input');
@@ -104,7 +101,6 @@ function createCardPopUp(){
         cardTitleInput.value = "";
         }
     })
-    
 }
 
 function createCard(cardTitleValue, project){
@@ -169,7 +165,6 @@ function createCard(cardTitleValue, project){
             const itemInputWrapper = btnContainer.querySelector(`#${cardID}-item-input-wrapper`);
             btnContainer.removeChild(itemInputWrapper);
         }
-
     })
 }
 
@@ -180,9 +175,7 @@ function createCard(cardTitleValue, project){
     container.appendChild(itemInputWrapper);
 
     const cardInput = makeInput("+", "text", `${cardId}-item-input`, "item-input", "new text", itemInputWrapper, "item-input", "item-input-label");
-    //export function makeInput(label, type, id, name, placeholder, container, inputClass, labelClass){
 
-    
     const itemValue = document.querySelector(`#${cardId}-item-input`);
 
     switchFocus(itemValue);
@@ -193,7 +186,6 @@ function createCard(cardTitleValue, project){
         }
     });
 
-
     const newItemBtn = document.createElement('button');
     newItemBtn.id = `${cardId}-new-item-btn`;
     itemInputWrapper.appendChild(newItemBtn);
@@ -202,7 +194,6 @@ function createCard(cardTitleValue, project){
         createNewItem(itemValue.value, cardType, cardId);
         itemValue.value = "";
     });
-
 }
 
 function getCardType (){
@@ -218,7 +209,6 @@ function getCardType (){
 }
 
 function createNewItem (itemValue, cardType, cardId){
-    console.log(`creating item ${itemValue} with type ${cardType}!`);
     const item = document.createElement('div');
     if(!document.querySelector(`#${getTitleToID(itemValue)}`)){
     item.id = getTitleToID(itemValue);

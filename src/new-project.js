@@ -1,14 +1,13 @@
 import { Project } from "./project.js";
 import { renderProject } from "./project.js";
-import { addCreateCardBtn } from "./cards.js";
 import { makeInput } from "./input.js";
 import { getTitleToID, switchFocus } from "./functions.js";
 import { makeSelect } from "./input.js";
-
+//
 export const projectState = { currentProject: ""};
-export const projectsHandler = [];
+export const projectsHandler = {};
+//
 window.projectsHandler = projectsHandler;
-
 
 export function createNewProjectBtn (){
     const newProjectBtn = document.querySelector('#new-project-btn');
@@ -31,8 +30,6 @@ export function createNewProjectBtn (){
     const createNewProject = document.createElement('div');
     createNewProject.id = "new-project-wrapper";
     inputWrapper.appendChild(createNewProject);
-    
-    // export function makeInput(label, type, id, name, placeholder, container, inputClass, labelClass){
 
     makeInput("New Project: ", "text", "new-project-title", 
         "new-project-title", "project name", createNewProject, "new-project-input", "new-project-label");
@@ -46,7 +43,6 @@ export function createNewProjectBtn (){
 
     makeInput("Description: ", "text", "new-project-description", 
         "new-project-description", "description", inputWrapper, "new-project-input", "new-project-label");
-
 
     makeSelect("Priority: ", "new-project-priority", inputWrapper, "new-project-priority", "new-project-label", "new-project-select", "01", "02", "03");
     
@@ -65,18 +61,20 @@ export function createNewProjectBtn (){
     const priority = document.querySelector("#new-project-priority").value;
     const dueDate = document.querySelector("#new-project-due-date").value;
     const project = new Project(id, title, description, priority, dueDate);
+        switchFocus(projectInputTitle);
+        if(!projectsHandler[id]){
+        projectsHandler[id] = project;
+    } else {
+        alert("project already exists!");
+        return;
+    }
     addProjectOnMenu(project, id, title, description, priority, dueDate);
-    switchFocus(projectInputTitle);
-
         })
     }
     });
 }
 
 export function addProjectOnMenu(project, projectID, title, description, priority, dueDate) {
-
-
- 
 
     const projectWrapper = document.createElement('div');
     projectWrapper.id = `${projectID}-btn-wrapper`;
@@ -108,14 +106,13 @@ export function addProjectOnMenu(project, projectID, title, description, priorit
     projectWrapper.appendChild(projectDueDate);
 
     projectBtn.addEventListener("click", () => {
-        if(!projectsHandler.includes(project)){
-            projectsHandler.push(project);
-        renderProject(project, projectID, title, description, priority, dueDate);
-        } else {
+        // if(!projectsHandler[projectID]){
+            // projectsHandler[projectID] = project;
+        // renderProject(project, projectID, title, description, priority, dueDate);
+        // } else {
             renderProject(project, projectID, title, description, priority, dueDate);
-        }
+        // }
     })
-
 }
 
 export function deleteProjectBtn(project, projectWrapper) {
@@ -133,7 +130,7 @@ export function deleteProjectBtn(project, projectWrapper) {
 export function deleteProject (project, projectWrapper) {
     const projectMenu = document.getElementById("project-menu");
     projectMenu.removeChild(projectWrapper);
-    
+
 
     const content = document.getElementById('content');
     const projectContent = document.getElementById(`${project.id}-container`);
@@ -142,6 +139,7 @@ export function deleteProject (project, projectWrapper) {
     content.removeChild(projectContent);
     }
 
+    delete projectsHandler[project.id];
 }
 
 export function editProject(project) {
@@ -176,7 +174,6 @@ container.appendChild(editContainer);
 }
 
 export function editProjectConfirm(project){
-    // renderProject(project, projectID, title, description, priority, dueDate){
     const oldProjectID = project.id;
 
     const newProjectTitle = document.querySelector('#edit-project-title').value;
@@ -193,11 +190,7 @@ export function editProjectConfirm(project){
 
     const projectWrapper = document.querySelector(`#${oldProjectID}-btn-wrapper`);
 
-    // export function addProjectOnMenu(project, projectID, title, description, priority, dueDate) {
     deleteProject(project, projectWrapper);
     addProjectOnMenu(project, project.id, project.title, project.description, project.priority, project.dueDate);
     renderProject(project, project.id, project.title, project.description, project.priority, project.dueDate);
-
-
-    console.log("confirming edit");
 }

@@ -1,5 +1,3 @@
-import { getTitleToID } from "./functions";
-
 export function makeInput(label, type, id, name, placeholder, container, inputClass, labelClass){
     const input = document.createElement('input');
     input.classList.add(inputClass);
@@ -50,4 +48,3 @@ export function makeSelect(labelEl, id, container, name, labelClass, selectClass
     container.appendChild(selectWrapper);
     return select;
 }
-

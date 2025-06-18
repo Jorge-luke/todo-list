@@ -1,7 +1,6 @@
 import { Project } from "./project.js"
 import { addProjectOnMenu, createNewProjectBtn, projectState } from "./new-project";
 import { renderProject } from "./project.js";
-import { deleteProjectBtn } from "./new-project";
 
 export function createDOM(){
     const container = document.getElementById('container');
@@ -47,14 +46,13 @@ export function createDOM(){
     navBottom.appendChild(newProjectBtn);
     createNewProjectBtn();
 
-
     const content = document.createElement('div');
     content.id = "content";
     container.appendChild(content);
-            if(!projectsHandler.includes(defaultProject)){
-            projectsHandler.push(defaultProject);
+        if(!projectsHandler[projectID]){
+        projectsHandler[projectID] = defaultProject;
+        renderProject(defaultProject, projectID, title, description, priority, dueDate);
+        } else {
             renderProject(defaultProject, projectID, title, description, priority, dueDate);
-            } else {
-                renderProject(defaultProject, projectID, title, description, priority, dueDate);
-            }
+        }
 }

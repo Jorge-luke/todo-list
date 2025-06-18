@@ -1,5 +1,3 @@
-
-
 export function deleteItem(container, item){
     container.removeChild(item);
 }
@@ -18,7 +16,6 @@ export function getTitleToID(string){
     }
     return fixed;
 }
-
 
 export function dragItem(elementClass, container){
 const list = container;

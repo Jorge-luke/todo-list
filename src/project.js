@@ -1,6 +1,5 @@
 import { addCreateCardBtn } from "./cards";
 import { deleteProject, projectState, editProject } from "./new-project";
-import { projectsHandler } from "./new-project";
 
 export class Project {
     constructor(id, title, description, priority, dueDate){
@@ -12,8 +11,6 @@ export class Project {
         this.cards = [];
     }
 }
-
-
 
 // export function addProjectOnMenu(project, projectID, title, description, priority) {
 export function renderProject(project, projectID, title, description, priority, dueDate){
@@ -56,7 +53,6 @@ export function renderProject(project, projectID, title, description, priority, 
             const projectWrapper = document.querySelector(`#${projectID}-btn-wrapper`);
             projectDelete.addEventListener('click', () => {
                 deleteProject(projectToDelete, projectWrapper)
-
             })
 
             const projectMiddle = document.createElement('div');
@@ -93,6 +89,5 @@ export function renderProject(project, projectID, title, description, priority, 
             addCreateCardBtn(cardCreatorContainer);
         
         projectState.currentProject = `${projectID}`;
-        console.log(project);
     }
 }
