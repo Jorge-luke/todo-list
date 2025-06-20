@@ -1,14 +1,15 @@
-import { projectState } from "./new-project";
+import { projectsHandler, projectState } from "./new-project";
 import { makeInput } from "./input";
 import { dragItem, dragCard} from "./functions.js"
 import { switchFocus } from "./functions.js";
 import { getTitleToID } from "./functions.js";
-import { deleteItem } from "./functions.js";
 
 export class Card {
-    constructor(title, project){
+    constructor(id, title){
+        this.id = id;
         this.title = title;
-        this.project = project;
+        this.items = [];
+        this.type = "";
     }
 }
 
@@ -42,7 +43,6 @@ function createCardPopUp(){
     }
 
     // structure of the card creator Pop Up
-    //
     const cardPopUpTitle = document.createElement('div');
     cardPopUpTitle.id = "card-pop-up-title";
     cardPopUpTitle.textContent = "Create new card of:";
@@ -52,8 +52,6 @@ function createCardPopUp(){
     makeInput ("Notes", "radio", "notes", "card-type", "", cardCreator, "card-creator-input", "card-creator-label");
     makeInput ("Checklist", "radio", "checklist", "card-type", "", cardCreator, "card-creator-input", "card-creator-label");
     makeInput ("", "text", "card-title-input", "card-title-input", "card title", cardCreator, "card-title-input", "none");
-    //
-
     // after selecting one option, focus on input for card title
     const radios = document.querySelectorAll('.card-creator-input');
     radios.forEach((element) => {
@@ -80,9 +78,12 @@ function createCardPopUp(){
     } else {
         const notes = document.querySelector('#notes');
         const checklist = document.querySelector('#checklist');
-        if(notes.checked || checklist.checked){
-            createCard(document.querySelector('#card-title-input').value, `${projectState.currentProject}`);
-        } else {
+        if(notes.checked){
+            createCard(cardTitleValue, "notes");
+            
+        } else if(checklist.checked){
+            createCard(cardTitleValue, "checklist");
+        }else{
             alert('Choose the type of card!');
         }
     }
@@ -102,14 +103,24 @@ function createCardPopUp(){
         }
     })
 }
-
-function createCard(cardTitleValue, project){
-    const container = document.querySelector('.project-content');
-    const card = new Card(cardTitleValue, project);
-
+function createCard(cardTitleValue, cardType){
     const cardID = getTitleToID(cardTitleValue);
+    const card = new Card(cardID, cardTitleValue);
+    card.id = cardID;
+    projectsHandler[projectState.currentProject].cards.push(card);
+    card.type = cardType;
+
+    renderCard(card);
+
+}
+
+export function renderCard(card){
+     const container = document.querySelector('.project-content');
+
+     const cardID = card.id;
+
     const cardBody = document.createElement('div');
-    cardBody.id = `${cardID}-card`;
+    cardBody.id = `${card.id}-card`;
     cardBody.classList.add('card-body');
     container.appendChild(cardBody);
 
@@ -119,9 +130,9 @@ function createCard(cardTitleValue, project){
 
     const cardTitle = document.createElement('div');
     cardTitle.classList.add('card-title');
-    cardTitle.textContent = cardTitleValue;
+    cardTitle.textContent = card.title;
     titleContainer.appendChild(cardTitle);
-    
+
     const moveCard = document.createElement('button');
     moveCard.classList.add('move-card');
     moveCard.id = `${cardID}-move-card`;
@@ -139,12 +150,12 @@ function createCard(cardTitleValue, project){
     deleteCardBtn.id = `${cardID}-delete-btn`;
     titleContainer.appendChild(deleteCardBtn);
 
-    deleteCardBtn.addEventListener('click', () => {
-        deleteItem(container, cardBody);
+        deleteCardBtn.addEventListener('click', () => {
+        deleteItem(card, container, cardBody);
     })
 
-    const cardType = getCardType();
-    cardBody.setAttribute('type', cardType);
+
+    cardBody.setAttribute('type', card.type);
 
     const btnContainer = document.createElement('div');
     btnContainer.classList.add('btn-container');
@@ -153,22 +164,33 @@ function createCard(cardTitleValue, project){
 
     const itemContainer = document.createElement('div');
     itemContainer.id = `${cardID}-item-container`;
+
+    itemContainer.classList.add('item-container');
     cardBody.appendChild(itemContainer);
+
+    itemContainer.innerHTML = "";
 
     const showItemInputBtn = document.createElement('button');
     showItemInputBtn.id = `${cardID}-show-item-input-btn`;
     btnContainer.appendChild(showItemInputBtn);
     showItemInputBtn.addEventListener("click", () => {
         if(!btnContainer.querySelector(`#${cardID}-item-input-wrapper`)){
-        showItemInput(cardTitleValue, cardType, cardID, btnContainer);
+        showItemInput(card, card.type, cardID, btnContainer);
         } else {
             const itemInputWrapper = btnContainer.querySelector(`#${cardID}-item-input-wrapper`);
             btnContainer.removeChild(itemInputWrapper);
         }
     })
+
+    card.items.forEach((itemData) => {
+        createNewItem(card, itemData.value, card.type, cardID, itemData);
+    })
+        dragItem(`${card.id}-item`, itemContainer);
 }
 
-    function showItemInput(cardTitleValue, cardType, cardId, container){
+
+
+    function showItemInput(card, cardType, cardId, container){
     const itemInputWrapper = document.createElement('div');
     itemInputWrapper.classList.add('item-input-wrapper');
     itemInputWrapper.id = `${cardId}-item-input-wrapper`;
@@ -181,7 +203,7 @@ function createCard(cardTitleValue, project){
     switchFocus(itemValue);
     itemValue.addEventListener('keydown', (event) => {
         if(event.key == "Enter"){
-            createNewItem(itemValue.value, cardType, cardId);
+            createNewItem(card, itemValue.value, cardType, cardId);
             itemValue.value = "";
         }
     });
@@ -191,24 +213,13 @@ function createCard(cardTitleValue, project){
     itemInputWrapper.appendChild(newItemBtn);
 
     newItemBtn.addEventListener('click', () => {
-        createNewItem(itemValue.value, cardType, cardId);
+        createNewItem(card, itemValue.value, cardType, cardId);
         itemValue.value = "";
     });
 }
 
-function getCardType (){
-    const cardTypeTest = document.querySelector('#notes');
 
-    let cardType = "0";
-    if (cardTypeTest.checked){
-        cardType = "notes";
-    } else {
-        cardType = "checklist";
-    }
-    return cardType;
-}
-
-function createNewItem (itemValue, cardType, cardId){
+function createNewItem (card, itemValue, cardType, cardId, itemData){
     const item = document.createElement('div');
     if(!document.querySelector(`#${getTitleToID(itemValue)}`)){
     item.id = getTitleToID(itemValue);
@@ -226,6 +237,11 @@ function createNewItem (itemValue, cardType, cardId){
 
     if(cardType == "checklist"){
         const itemCheck = new makeInput("", 'checkbox', `${item.id}-checkbox`, `${item.id}-checkbox`, "", item, "item-checkbox", "");
+        if(itemData && itemData.checked) itemCheck.checked = true;
+        itemCheck.addEventListener('change', () => {
+            const obj = card.items.find(obj => obj.id === item.id);
+            if (obj) obj.checked = itemCheck.checked;
+        })
     }
 
     const deleteItemBtn = document.createElement('button');
@@ -234,18 +250,33 @@ function createNewItem (itemValue, cardType, cardId){
     item.appendChild(deleteItemBtn);
 
     const focused = document.querySelector(`#${cardId}-item-input`);
+    if(focused){
     switchFocus(focused);
+    }
 
     itemText.textContent = `${itemValue}`;
 
     const itemContainer = document.querySelector(`#${cardId}-item-container`);
-    itemContainer.classList.add('item-container');
     itemContainer.appendChild(item);
 
         deleteItemBtn.addEventListener('click', () => {
-        deleteItem(itemContainer, item); // (card, item)
+        deleteItem(card, itemContainer, item); // (card, item)
     })
 
-    const container = document.querySelector(`#${cardId}-item-container`);
-    dragItem(`${cardId}-item`, container);
+    if (!itemData){
+    card.items.push({
+        value: itemValue,
+        id: item.id,
+        checked: false
+    });
+    }
+    item.setAttribute("item-value", itemValue);
+}
+
+function deleteItem(card, container, item){
+    container.removeChild(item);
+    const index = card.items.findIndex(obj => obj.id === item.id);
+    if (index > -1){
+        card.items.splice(index, 1);
+    }
 }

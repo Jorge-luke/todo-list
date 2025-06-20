@@ -1,6 +1,4 @@
-export function deleteItem(container, item){
-    container.removeChild(item);
-}
+
 
 export function switchFocus(element){
     element.focus();

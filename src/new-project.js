@@ -41,41 +41,45 @@ export function createNewProjectBtn (){
     addProjectBtn.id = "add-new-project";
     container.appendChild(addProjectBtn);
 
-    makeInput("Description: ", "text", "new-project-description", 
+    const descriptionInput = makeInput("Description: ", "text", "new-project-description", 
         "new-project-description", "description", inputWrapper, "new-project-input", "new-project-label");
 
-    makeSelect("Priority: ", "new-project-priority", inputWrapper, "new-project-priority", "new-project-label", "new-project-select", "01", "02", "03");
+    const prioritySelect = makeSelect("Priority: ", "new-project-priority", inputWrapper, "new-project-priority", "new-project-label", "new-project-select", "01", "02", "03");
     
-    makeInput("Due Date: ", "date", "new-project-due-date", "new-project-due-date", "Select date limit", inputWrapper, "new-project-input", "new-project-label");
+    const dueDateInput = makeInput("Due Date: ", "date", "new-project-due-date", "new-project-due-date", "Select date limit", inputWrapper, "new-project-input", "new-project-label");
 
     projectInputTitle.addEventListener("keydown", (event)=>{
         if (event.key == "Enter"){
-            addProjectOnMenu();
+            handleAddProject();
         }
     })
-
+    
+    descriptionInput.addEventListener("keydown", (event)=>{
+        if (event.key == "Enter"){
+            handleAddProject();
+        }
+    })
+        
+    prioritySelect.addEventListener("keydown", (event)=>{
+        if (event.key == "Enter"){
+            handleAddProject();
+        }
+    })
+    
+    dueDateInput.addEventListener("keydown", (event)=>{
+        if (event.key == "Enter"){
+            handleAddProject();
+        }
+    })
+    
     addProjectBtn.addEventListener("click", () => {
-    const title = document.querySelector("#new-project-title").value;
-    const id = getTitleToID(title);
-    const description = document.querySelector("#new-project-description").value;
-    const priority = document.querySelector("#new-project-priority").value;
-    const dueDate = document.querySelector("#new-project-due-date").value;
-    const project = new Project(id, title, description, priority, dueDate);
-        switchFocus(projectInputTitle);
-        if(!projectsHandler[id]){
-        projectsHandler[id] = project;
-    } else {
-        alert("project already exists!");
-        return;
-    }
-    addProjectOnMenu(project, id, title, description, priority, dueDate);
+        handleAddProject();
         })
     }
     });
 }
 
 export function addProjectOnMenu(project, projectID, title, description, priority, dueDate) {
-
     const projectWrapper = document.createElement('div');
     projectWrapper.id = `${projectID}-btn-wrapper`;
     projectWrapper.classList.add('project-btn-wrapper');
@@ -96,7 +100,7 @@ export function addProjectOnMenu(project, projectID, title, description, priorit
     const projectPriority = document.createElement('div');
     projectPriority.id = `${projectID}-btn-priority-btn`;
     projectPriority.classList.add('project-btn-priority');
-    projectPriority.textContent = `Priority: ${project.priority}`;
+    projectPriority.textContent = `Priority: ${priority}`;
     projectWrapper.appendChild(projectPriority);
 
     const projectDueDate = document.createElement('div');
@@ -106,12 +110,8 @@ export function addProjectOnMenu(project, projectID, title, description, priorit
     projectWrapper.appendChild(projectDueDate);
 
     projectBtn.addEventListener("click", () => {
-        // if(!projectsHandler[projectID]){
-            // projectsHandler[projectID] = project;
-        // renderProject(project, projectID, title, description, priority, dueDate);
-        // } else {
-            renderProject(project, projectID, title, description, priority, dueDate);
-        // }
+            projectState.currentProject = projectID;
+            renderProject(projectsHandler[projectState.currentProject]);
     })
 }
 
@@ -140,6 +140,10 @@ export function deleteProject (project, projectWrapper) {
     }
 
     delete projectsHandler[project.id];
+    
+    if(projectState.currentProject = project.id){
+        projectState.currentProject = "";
+    }
 }
 
 export function editProject(project) {
@@ -147,7 +151,7 @@ export function editProject(project) {
 
     const editContainer = document.createElement('div');
     editContainer.id = "edit-container";
-container.appendChild(editContainer);    
+    container.appendChild(editContainer);    
 
     const editStarter = document.createElement('div');
     editStarter.id = "edit-starter";
@@ -177,7 +181,12 @@ export function editProjectConfirm(project){
     const oldProjectID = project.id;
 
     const newProjectTitle = document.querySelector('#edit-project-title').value;
+    
     const newProjectID = getTitleToID(newProjectTitle);
+    if (newProjectID !== oldProjectID && projectsHandler[newProjectID]) {
+    alert("A project with this title already exists!");
+    return;
+    }
     const newProjectDescription = document.querySelector('#edit-project-description').value;
     const newProjectPriority = document.querySelector('#edit-project-priority').value;
     const newProjectDueDate = document.querySelector('#edit-project-due-date').value;
@@ -192,5 +201,27 @@ export function editProjectConfirm(project){
 
     deleteProject(project, projectWrapper);
     addProjectOnMenu(project, project.id, project.title, project.description, project.priority, project.dueDate);
-    renderProject(project, project.id, project.title, project.description, project.priority, project.dueDate);
+    renderProject(project);
+}
+
+function handleAddProject(){
+    const title = document.querySelector("#new-project-title");
+    const id = getTitleToID(title.value);
+    const description = document.querySelector("#new-project-description");
+    const priority = document.querySelector("#new-project-priority");
+    const dueDate = document.querySelector("#new-project-due-date");
+    const project = new Project(id, title.value, description.value, priority.value, dueDate.value);
+    const projectInputTitle = document.querySelector("#new-project-title");
+        switchFocus(projectInputTitle);
+        if(!projectsHandler[id]){
+        projectsHandler[id] = project;
+    } else {
+        alert("project already exists!");
+        return;
+    }
+    addProjectOnMenu(project, id, title.value, description.value, priority.value, dueDate.value);
+    title.value = "";
+    description.value = "";
+    priority.value = "01";
+    dueDate.value = ""
 }

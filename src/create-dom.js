@@ -1,5 +1,5 @@
 import { Project } from "./project.js"
-import { addProjectOnMenu, createNewProjectBtn, projectState } from "./new-project";
+import { addProjectOnMenu, createNewProjectBtn, projectsHandler, projectState } from "./new-project";
 import { renderProject } from "./project.js";
 
 export function createDOM(){
@@ -50,9 +50,7 @@ export function createDOM(){
     content.id = "content";
     container.appendChild(content);
         if(!projectsHandler[projectID]){
-        projectsHandler[projectID] = defaultProject;
-        renderProject(defaultProject, projectID, title, description, priority, dueDate);
-        } else {
-            renderProject(defaultProject, projectID, title, description, priority, dueDate);
+            projectsHandler[projectID] = defaultProject;
         }
+        renderProject(projectsHandler[projectID]);
 }
