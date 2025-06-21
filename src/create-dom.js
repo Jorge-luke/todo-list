@@ -31,7 +31,7 @@ export function createDOM(){
     projectMenu.id = "project-menu";
     navBottom.appendChild(projectMenu);
 
-    const defaultProject = new Project("default-project", "Default Project", "This is the default project", "01", "undefined");
+    const defaultProject = new Project("default-project", "Default Project", "This is the default project", "01", "");
 
     const projectID = defaultProject.id;
     const title = defaultProject.title;

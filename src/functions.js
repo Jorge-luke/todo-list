@@ -1,3 +1,6 @@
+import { Project, renderProject } from "./project.js";
+import { Card } from "./cards.js";
+import { addProjectOnMenu, projectState } from "./new-project.js";
 
 
 export function switchFocus(element){

@@ -111,7 +111,7 @@ function createCard(cardTitleValue, cardType){
     card.type = cardType;
 
     renderCard(card);
-
+     //ojectsTotorage()
 }
 
 export function renderCard(card){
@@ -154,7 +154,6 @@ export function renderCard(card){
         deleteItem(card, container, cardBody);
     })
 
-
     cardBody.setAttribute('type', card.type);
 
     const btnContainer = document.createElement('div');
@@ -188,8 +187,6 @@ export function renderCard(card){
         dragItem(`${card.id}-item`, itemContainer);
 }
 
-
-
     function showItemInput(card, cardType, cardId, container){
     const itemInputWrapper = document.createElement('div');
     itemInputWrapper.classList.add('item-input-wrapper');
@@ -217,7 +214,6 @@ export function renderCard(card){
         itemValue.value = "";
     });
 }
-
 
 function createNewItem (card, itemValue, cardType, cardId, itemData){
     const item = document.createElement('div');
@@ -271,6 +267,7 @@ function createNewItem (card, itemValue, cardType, cardId, itemData){
     });
     }
     item.setAttribute("item-value", itemValue);
+     //ojectsTotorage()
 }
 
 function deleteItem(card, container, item){
@@ -279,4 +276,5 @@ function deleteItem(card, container, item){
     if (index > -1){
         card.items.splice(index, 1);
     }
+     //ojectsTotorage()
 }

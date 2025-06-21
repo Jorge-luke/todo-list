@@ -36,7 +36,6 @@ export function makeSelect(labelEl, id, container, name, labelClass, selectClass
     select.setAttribute('name', name);
     select.classList.add(`${selectClass}`);
 
-
     value.forEach((element) => {
         const option = document.createElement('option');
         option.setAttribute('value', element);

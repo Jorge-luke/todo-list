@@ -1,6 +1,7 @@
 import { addCreateCardBtn } from "./cards";
 import { deleteProject, projectState, editProject, projectsHandler } from "./new-project";
 import { renderCard } from "./cards";
+import { format, parseISO } from "../node_modules/date-fns";
 
 export class Project {
     constructor(id, title, description, priority, dueDate){
@@ -12,7 +13,6 @@ export class Project {
         this.cards = [];
     }
 }
-
 // export function addProjectOnMenu(project, projectID, title, description, priority) {
 export function renderProject(project){
         const content = document.querySelector('#content');
@@ -24,7 +24,6 @@ export function renderProject(project){
             while(content.firstChild){
                 content.removeChild(content.firstChild);
             }
-
             // Render new project
             const projectContainer = document.createElement('div');
             projectContainer.id = `${project.id}-container`;
@@ -76,8 +75,16 @@ export function renderProject(project){
             const projectDueDate = document.createElement('div');
             projectDueDate.id = `${project.id}-due-date`;
             projectDueDate.classList.add('project-due-date');
-            projectDueDate.textContent = `Due date: ${project.dueDate}`;
+
+            if(project.dueDate){
+            const localDate = parseISO(project.dueDate);
+            const formattedDate = format(localDate, "MM/dd/yyyy");
+            projectDueDate.textContent = `Due date: ${formattedDate}`;
             projectMiddle.appendChild(projectDueDate);
+            } else {
+            projectDueDate.textContent = `Due date: not defined!`;
+            projectMiddle.appendChild(projectDueDate);
+            }
 
             const cardCreatorContainer = document.createElement('div');
             cardCreatorContainer.id = "card-creator-container";

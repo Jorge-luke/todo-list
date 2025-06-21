@@ -3,6 +3,7 @@ import { renderProject } from "./project.js";
 import { makeInput } from "./input.js";
 import { getTitleToID, switchFocus } from "./functions.js";
 import { makeSelect } from "./input.js";
+import { isAfter, parseISO, startOfDay } from "../node_modules/date-fns";
 //
 export const projectState = { currentProject: ""};
 export const projectsHandler = {};
@@ -26,7 +27,6 @@ export function createNewProjectBtn (){
     inputWrapper.id = 'input-wrapper';
     container.appendChild(inputWrapper);
     
-
     const createNewProject = document.createElement('div');
     createNewProject.id = "new-project-wrapper";
     inputWrapper.appendChild(createNewProject);
@@ -45,7 +45,7 @@ export function createNewProjectBtn (){
         "new-project-description", "description", inputWrapper, "new-project-input", "new-project-label");
 
     const prioritySelect = makeSelect("Priority: ", "new-project-priority", inputWrapper, "new-project-priority", "new-project-label", "new-project-select", "01", "02", "03");
-    
+
     const dueDateInput = makeInput("Due Date: ", "date", "new-project-due-date", "new-project-due-date", "Select date limit", inputWrapper, "new-project-input", "new-project-label");
 
     projectInputTitle.addEventListener("keydown", (event)=>{
@@ -53,25 +53,21 @@ export function createNewProjectBtn (){
             handleAddProject();
         }
     })
-    
     descriptionInput.addEventListener("keydown", (event)=>{
         if (event.key == "Enter"){
             handleAddProject();
         }
     })
-        
     prioritySelect.addEventListener("keydown", (event)=>{
         if (event.key == "Enter"){
             handleAddProject();
         }
     })
-    
     dueDateInput.addEventListener("keydown", (event)=>{
         if (event.key == "Enter"){
             handleAddProject();
         }
     })
-    
     addProjectBtn.addEventListener("click", () => {
         handleAddProject();
         })
@@ -149,6 +145,11 @@ export function deleteProject (project, projectWrapper) {
 export function editProject(project) {
     const container = document.querySelector(".project-top-title");
 
+    if(document.querySelector("#edit-container")){
+        container.removeChild(document.querySelector("#edit-container"));
+        return;
+    }
+
     const editContainer = document.createElement('div');
     editContainer.id = "edit-container";
     container.appendChild(editContainer);    
@@ -179,10 +180,9 @@ export function editProject(project) {
 
 export function editProjectConfirm(project){
     const oldProjectID = project.id;
-
     const newProjectTitle = document.querySelector('#edit-project-title').value;
-    
     const newProjectID = getTitleToID(newProjectTitle);
+
     if (newProjectID !== oldProjectID && projectsHandler[newProjectID]) {
     alert("A project with this title already exists!");
     return;
@@ -191,15 +191,32 @@ export function editProjectConfirm(project){
     const newProjectPriority = document.querySelector('#edit-project-priority').value;
     const newProjectDueDate = document.querySelector('#edit-project-due-date').value;
 
+        const today = startOfDay(new Date());
+    const dueDateObj = parseISO(newProjectDueDate);
+    
+    if(newProjectDueDate && !isAfter(dueDateObj, today)){
+        alert("Pick a date in future!");
+        return;
+    }
+
+    delete projectsHandler[oldProjectID];
+
     project.id = newProjectID;
     project.title = newProjectTitle;
     project.description = newProjectDescription;
     project.priority = newProjectPriority;
     project.dueDate = newProjectDueDate;
 
-    const projectWrapper = document.querySelector(`#${oldProjectID}-btn-wrapper`);
+    projectsHandler[newProjectID] = project;
+    projectState.currentProject = newProjectID;
 
-    deleteProject(project, projectWrapper);
+    const projectWrapper = document.querySelector(`#${oldProjectID}-btn-wrapper`);
+    if(projectWrapper){
+        projectWrapper.remove();
+    }
+
+    projectsHandler[newProjectID].cards = project.cards;
+
     addProjectOnMenu(project, project.id, project.title, project.description, project.priority, project.dueDate);
     renderProject(project);
 }
@@ -210,6 +227,16 @@ function handleAddProject(){
     const description = document.querySelector("#new-project-description");
     const priority = document.querySelector("#new-project-priority");
     const dueDate = document.querySelector("#new-project-due-date");
+
+    const today = startOfDay(new Date());
+    const dueDateObj = parseISO(dueDate.value);
+    
+    if(dueDate.value && !isAfter(dueDateObj, today)){
+        alert("Pick a date in future!");
+        return;
+    }
+
+
     const project = new Project(id, title.value, description.value, priority.value, dueDate.value);
     const projectInputTitle = document.querySelector("#new-project-title");
         switchFocus(projectInputTitle);
