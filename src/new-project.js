@@ -1,12 +1,13 @@
 import { Project } from "./project.js";
 import { renderProject } from "./project.js";
 import { makeInput } from "./input.js";
-import { getTitleToID, switchFocus } from "./functions.js";
+import { getTitleToID, loadProjectsFromLocalStorage, switchFocus, updateProjectsOnLocalStorage } from "./functions.js";
 import { makeSelect } from "./input.js";
 import { isAfter, parseISO, startOfDay } from "../node_modules/date-fns";
+// import { updateProjectsOnLocalStorage } from "./functions.jsjs"
 //
 export const projectState = { currentProject: ""};
-export const projectsHandler = {};
+export const projectsHandler = { };
 //
 window.projectsHandler = projectsHandler;
 
@@ -75,40 +76,41 @@ export function createNewProjectBtn (){
     });
 }
 
-export function addProjectOnMenu(project, projectID, title, description, priority, dueDate) {
+export function addProjectOnMenu(project) {
     const projectWrapper = document.createElement('div');
-    projectWrapper.id = `${projectID}-btn-wrapper`;
+    projectWrapper.id = `${project.id}-btn-wrapper`;
     projectWrapper.classList.add('project-btn-wrapper');
 
     const projectMenu = document.querySelector('#project-menu');
     projectMenu.appendChild(projectWrapper);
     
     const projectBtn = document.createElement('button');
-    projectBtn.id = projectID;
+    projectBtn.id = project.id;
     projectBtn.classList.add('project-select');
-    projectBtn.textContent = title;
+    projectBtn.textContent = project.title;
     projectWrapper.appendChild(projectBtn);
 
     deleteProjectBtn(projectBtn, projectWrapper);
 
-    const projectDescription = description;
+    const projectDescription = project.description;
 
     const projectPriority = document.createElement('div');
-    projectPriority.id = `${projectID}-btn-priority-btn`;
+    projectPriority.id = `${project.id}-btn-priority-btn`;
     projectPriority.classList.add('project-btn-priority');
-    projectPriority.textContent = `Priority: ${priority}`;
+    projectPriority.textContent = `Priority: ${project.prio}`;
     projectWrapper.appendChild(projectPriority);
 
     const projectDueDate = document.createElement('div');
-    projectDueDate.id = `${projectID}-btn-due-date-btn`;
+    projectDueDate.id = `${project.id}-btn-due-date-btn`;
     projectDueDate.classList.add('project-btn-due-date');
-    projectDueDate.textContent = `Due date: ${dueDate}`;
+    projectDueDate.textContent = `Due date: ${project.dueDate}`;
     projectWrapper.appendChild(projectDueDate);
 
     projectBtn.addEventListener("click", () => {
-            projectState.currentProject = projectID;
+            projectState.currentProject = project.id;
             renderProject(projectsHandler[projectState.currentProject]);
     })
+    projectsHandler[project.id] = project;
 }
 
 export function deleteProjectBtn(project, projectWrapper) {
@@ -140,6 +142,7 @@ export function deleteProject (project, projectWrapper) {
     if(projectState.currentProject = project.id){
         projectState.currentProject = "";
     }
+
 }
 
 export function editProject(project) {
@@ -176,6 +179,8 @@ export function editProject(project) {
     sendEditBtn.addEventListener('click', () => {
         editProjectConfirm(project);
     })
+
+
 }
 
 export function editProjectConfirm(project){
@@ -217,8 +222,9 @@ export function editProjectConfirm(project){
 
     projectsHandler[newProjectID].cards = project.cards;
 
-    addProjectOnMenu(project, project.id, project.title, project.description, project.priority, project.dueDate);
+    addProjectOnMenu(project);
     renderProject(project);
+    updateProjectsOnLocalStorage();
 }
 
 function handleAddProject(){
@@ -246,9 +252,11 @@ function handleAddProject(){
         alert("project already exists!");
         return;
     }
-    addProjectOnMenu(project, id, title.value, description.value, priority.value, dueDate.value);
+    addProjectOnMenu(project);
     title.value = "";
     description.value = "";
     priority.value = "01";
-    dueDate.value = ""
+    dueDate.value = "";
+
+    updateProjectsOnLocalStorage();
 }

@@ -1,6 +1,6 @@
 import { projectsHandler, projectState } from "./new-project";
 import { makeInput } from "./input";
-import { dragItem, dragCard} from "./functions.js"
+import { dragItem, dragCard, updateProjectsOnLocalStorage} from "./functions.js"
 import { switchFocus } from "./functions.js";
 import { getTitleToID } from "./functions.js";
 
@@ -111,7 +111,7 @@ function createCard(cardTitleValue, cardType){
     card.type = cardType;
 
     renderCard(card);
-     //ojectsTotorage()
+     updateProjectsOnLocalStorage();
 }
 
 export function renderCard(card){
@@ -268,6 +268,7 @@ function createNewItem (card, itemValue, cardType, cardId, itemData){
     }
     item.setAttribute("item-value", itemValue);
      //ojectsTotorage()
+     updateProjectsOnLocalStorage();
 }
 
 function deleteItem(card, container, item){

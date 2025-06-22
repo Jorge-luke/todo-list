@@ -1,6 +1,7 @@
 import { Project, renderProject } from "./project.js";
 import { Card } from "./cards.js";
 import { addProjectOnMenu, projectState } from "./new-project.js";
+import { projectsHandler } from "./new-project.js";
 
 
 export function switchFocus(element){
@@ -132,4 +133,27 @@ function getDragAfterElement(container, y) {
     { offset: Number.NEGATIVE_INFINITY, element: null }
   ).element;
 }
+}
+
+export function updateProjectsOnLocalStorage(){
+  const projects = localStorage.setItem("projects", JSON.stringify(projectsHandler));
+}
+
+export function loadProjectsFromLocalStorage(){
+  const projects = JSON.parse(localStorage.getItem("projects")) || [];
+  console.log(`Those are the projects:`, projects);
+
+    const projectsArray = Object.values(projects);
+  console.log(projectsArray);
+
+  projectsArray.forEach((project) => {
+    const newProject = new Project(project.id, project.title, project.description, project.priority, project.dueDate);
+    projectsHandler[newProject.id] = newProject;
+    newProject.cards = project.cards;
+    const cards = newProject.cards;
+    if(!document.querySelector('#project-menu').querySelector(`#${newProject.id}-btn-wrapper`)){
+    addProjectOnMenu(newProject);
+    }
+  }
+);
 }

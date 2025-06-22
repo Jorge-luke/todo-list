@@ -1,6 +1,7 @@
-import { Project } from "./project.js"
-import { addProjectOnMenu, createNewProjectBtn, projectsHandler, projectState } from "./new-project";
-import { renderProject } from "./project.js";
+import { loadProjectsFromLocalStorage, updateProjectsOnLocalStorage } from "./functions.js"
+import {  addProjectOnMenu, createNewProjectBtn, projectsHandler, projectState } from "./new-project";
+import { Project, renderProject } from "./project.js"
+
 
 export function createDOM(){
     const container = document.getElementById('container');
@@ -31,15 +32,11 @@ export function createDOM(){
     projectMenu.id = "project-menu";
     navBottom.appendChild(projectMenu);
 
+    if(Object.keys(projectsHandler).length === 0){
     const defaultProject = new Project("default-project", "Default Project", "This is the default project", "01", "");
-
-    const projectID = defaultProject.id;
-    const title = defaultProject.title;
-    const description = defaultProject.description;
-    const priority = defaultProject.priority;
-    const dueDate = defaultProject.dueDate;
-    
-    addProjectOnMenu(defaultProject, projectID, title, description, priority, dueDate);
+    projectsHandler[defaultProject.id] = defaultProject;
+    addProjectOnMenu(defaultProject);
+    }
 
     const newProjectBtn = document.createElement('button');
     newProjectBtn.id = "new-project-btn";
@@ -49,8 +46,8 @@ export function createDOM(){
     const content = document.createElement('div');
     content.id = "content";
     container.appendChild(content);
-        if(!projectsHandler[projectID]){
-            projectsHandler[projectID] = defaultProject;
-        }
-        renderProject(projectsHandler[projectID]);
+
+        renderProject(projectState.currentProject);
+    
+        loadProjectsFromLocalStorage();
 }

@@ -1,16 +1,14 @@
 import "./styles.css";
 import { createDOM } from "./create-dom";
+import { loadProjectsFromLocalStorage } from "./functions";
+
 
 createDOM();
-
-
-
+loadProjectsFromLocalStorage();
 
 //  Set up a function that saves the projects (and todos) to localStorage every time a new project (or todo) is created
 
 //  And another function that looks for that data in localStorage when your app is first loaded.
-
-
 
 
 
