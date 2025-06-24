@@ -94,7 +94,7 @@ list.addEventListener("dragend", (e) => {
 list.addEventListener("dragover", (e) => {
   e.preventDefault(); // Necessary to allow dropping
   if (!draggingEl || !(draggingEl instanceof Node)) return;
-  const afterElement = getDragAfterElement(list, e.clientY);
+  const afterElement = getDragAfterElement(list, e.clientX);
   if (afterElement == null) {
     list.appendChild(draggingEl);
   } else {
@@ -123,7 +123,7 @@ function getDragAfterElement(container, y) {
   return draggableElements.reduce(
     (closest, child) => {
       const box = child.getBoundingClientRect();
-      const offset = y - box.top - box.height / 2;
+      const offset = y - box.left - box.width / 2;
       if (offset < 0 && offset > closest.offset) {
         return { offset: offset, element: child };
       } else {
@@ -156,4 +156,17 @@ export function loadProjectsFromLocalStorage(){
     }
   }
 );
+}
+
+export function updateCurrentState (){
+  const current = localStorage.setItem("current", JSON.stringify(projectState.currentProject));
+}
+
+export function loadCurrentState(){
+  const current = JSON.parse(localStorage.getItem('current'));
+  projectState.currentProject = current;
+    if (current) {
+    projectState.currentProject = current;
+
+  }
 }

@@ -2,6 +2,8 @@ import { addCreateCardBtn } from "./cards";
 import { deleteProject, projectState, editProject, projectsHandler } from "./new-project";
 import { renderCard } from "./cards";
 import { format, parseISO } from "../node_modules/date-fns";
+import { updateCurrentState, loadCurrentState, updateProjectsOnLocalStorage } from "./functions.js";
+import  bin  from "./img/bin.png";
 
 export class Project {
     constructor(id, title, description, priority, dueDate){
@@ -15,6 +17,9 @@ export class Project {
 }
 // export function addProjectOnMenu(project, projectID, title, description, priority) {
 export function renderProject(project){
+        if (!project) {
+        return;
+        }
         const content = document.querySelector('#content');
 
         //only renders if this is a different project
@@ -37,6 +42,7 @@ export function renderProject(project){
 
             const projectEdit = document.createElement('button');
             projectEdit.id = `${project.id}-edit-btn`;
+            projectEdit.classList.add('project-edit-btn')
             projectEdit.textContent = "EDIT";
             projectTop.appendChild(projectEdit);
 
@@ -44,8 +50,10 @@ export function renderProject(project){
                 editProject(project);
             })
 
-            const projectDelete = document.createElement('button');
+            const projectDelete = document.createElement('img');
+            projectDelete.src = bin;
             projectDelete.id = `${project.id}-delete`;
+            projectDelete.classList.add('project-delete-btn');
             projectDelete.textContent = "DELETE";
             projectTop.appendChild(projectDelete);
 
@@ -88,6 +96,7 @@ export function renderProject(project){
 
             const cardCreatorContainer = document.createElement('div');
             cardCreatorContainer.id = "card-creator-container";
+            cardCreatorContainer.className = "card-creator-hidden";
             projectContainer.appendChild(cardCreatorContainer);
 
             const projectContent = document.createElement('div');
@@ -97,6 +106,8 @@ export function renderProject(project){
             addCreateCardBtn(cardCreatorContainer);
         
         projectState.currentProject = `${project.id}`;
+        updateCurrentState();
+        updateProjectsOnLocalStorage();
 
         project.cards.forEach((card) => {
             renderCard(card);

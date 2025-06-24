@@ -1,43 +1,118 @@
 :root{
-    font-size: 2rem;
-    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5rem;
+    font-family: monospace;
+    --main-background-color: rgb(245, 155, 45);
+    --main-border: 0.2rem solid rgb(241, 133, 1);
+    --secondary-background-color: rgb(248, 177, 90);
+    --secondary-border: 0.1rem solid rgb(253, 139, 0);
+    --button-color: rgb(243, 239, 0);
+    --button-border: 0.05rem solid rgba(248, 108, 108, 0.795);
+    --input-color: rgb(250, 249, 172);
+    --input-border: 0.05rem solid rgba(255, 171, 171, 0.795);
 }
-
-body {
-    background-color: rgb(58, 82, 161);
-}
-
 button {
     width: 2rem;
     height: 2rem;
+    border-radius: 0.4rem;
+    background-color: var(--button-color);
+    border: var(--button-border);
+    font-size: 0.6rem;
 }
+
+body {
+    background-color: rgba(255, 207, 48, 0.877);
+}
+
 
 #container {
     border: 2px solid orange;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-top: 2rem;
 }
 
 #page-title {
-    text-align: center;
+    align-self: center;
+    width: fit-content;
+    background-color: var(--main-background-color);
+    border: var(--main-border);
 }
 
 #nav-top-text {
+    justify-self: center;
+    width: fit-content;
     text-align: center;
+    background-color: var(--main-background-color);
+    border: var(--main-border);
 }
 
 #nav-bottom {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 0.6rem;
+}
+
+#project-menu {
+    display: flex;
+    font-size: 0.6em;
+    flex-wrap: wrap;
+    gap: 0.15rem;
+}
+
+.project-btn-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: fit-content;
+    width: fit-content;
+    padding: 1rem;
+    background-color: var(--secondary-background-color);
+    border: var(--secondary-border);
+    border-radius: 2rem;
+}
+
+input {
+    background-color: var(--input-color);
+    border: var(--input-border);
 }
 
 .project-select {
     margin: 0px;
-    padding: 0px;
+    padding: 0.5rem;
+    width: fit-content;
+    position: relative;
 }
 
-/* .project-btn-wrapper {
-    display: flex;
-} */
+#new-project-btn {
+    width: 3rem;
+}
+
+.menu-delete-btn {
+    order: -1;
+    right: 0.8rem;
+    width: 1rem;
+}
+
+.project-edit-btn {
+    font-size: 0.5rem;
+    position: relative;
+    bottom: 0.8rem;
+    left: 1.8rem;
+    width: 1.7rem;
+    height: 1.7rem;
+}
+
+.project-delete-btn {
+    position: relative;
+    left: 2rem;
+}
+
+#add-new-project {
+    width: 2rem;
+    height: 1.5rem;
+}
 
 #input-wrapper {
     display: flex;
@@ -45,26 +120,177 @@ button {
 }
 
 #edit-container {
-    background-color: salmon;
+    background-color: var(--secondary-background-color);
+    border-radius: 0.8rem;
+}
+
+.project-top-title {
+    position: relative;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+}
+
+#send-edit-btn {
+    width: 3rem;
+    margin-left: 0.2rem;
+}
+
+.project-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+        min-height: 25rem;
+    height: fit-content;
+}
+
+.project-top-title {
+    background-color: var(--main-background-color);
+    border: var(--main-border);
+    border-radius: 1rem;
 }
 
 .project-content {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
     height: fit-content;
-    background-color: blue;
+    background-color: var(--secondary-background-color);
+    border: var(--secondary-border);
+    border-width: 0.4rem;
+    border-radius: 1rem;
 }
 
 #card-creator-container {
+    display: flex;
+    flex-direction: column;
     height: fit-content;
-    width: 5rem;
-    background-color: bisque;
+    width: fit-content;
 }
+
+#cancel-card-creation {
+    width: 3rem;
+    position: absolute;
+    bottom: 11rem;
+    left: 11rem;
+}
+
+#new-card-btn {
+    width: 3rem;
+}
+
+.card-creator-show{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 2rem;
+    background-color: var(--main-background-color);
+    border: var(--button-border);
+    border-width: 0.3rem;
+    border-radius: 1rem;
+    position: fixed;
+    bottom: 12rem;
+    min-width: 10rem;
+    width: fit-content;
+    z-index: 1;
+}
+
+#card-creator {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.card-creator-hidden{
+}
+
+#create-card-button {
+    width: 4rem;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+
 
 .card-body {
     height: fit-content;
-    background-color: lightblue;
+    width: fit-content;
+    max-width: 10rem;
+    background-color: var(--main-background-color);
     border: 1px solid purple;
+    /* overflow: hidden; */
+    word-wrap: break-word;
+    word-break: break-word;
+    border-radius: 0.2rem;
+    border: var(--main-border);
 }
 
-.item {
+.title-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.card-title {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.move-card {
+     width: 1.5rem;
+    grid-column: 1;
+    justify-self: start;
+    background-color: var(--main-background-color);
+    background-image: url('./img/move.png');
+    background-size: cover;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+
+
+.delete-btn {
+    position: relative;
+    bottom: 0.18rem;
+    left: 0.18rem;
+    justify-self: end;
+    grid-column: 2;
+}
+
+.item-delete-btn {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+.show-item-input-btn {
+    font-size: 0.6rem;
+    width: 3.15rem;
+    height: 1rem;
+}
+
+.new-item-btn {
     display: flex;
+    position: relative;
+    justify-self: end;
+    font-size: 0.6rem;
+    width: 3.15rem;
+    height: 1rem;
+}
+
+
+
+.item {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 8fr 1fr 1fr;
+    align-items: center;
+    padding: 0.2rem;
+    border: var(--button-border);
+}
+
+.item-text {
+    position: relative;
+    font-size: 0.8rem;
+
 }

@@ -1,9 +1,11 @@
 import { Project } from "./project.js";
 import { renderProject } from "./project.js";
 import { makeInput } from "./input.js";
-import { getTitleToID, loadProjectsFromLocalStorage, switchFocus, updateProjectsOnLocalStorage } from "./functions.js";
+import { getTitleToID, loadProjectsFromLocalStorage, switchFocus, updateCurrentState, updateProjectsOnLocalStorage } from "./functions.js";
 import { makeSelect } from "./input.js";
 import { isAfter, parseISO, startOfDay } from "../node_modules/date-fns";
+import  bin  from "./img/bin.png";
+
 // import { updateProjectsOnLocalStorage } from "./functions.jsjs"
 //
 export const projectState = { currentProject: ""};
@@ -13,6 +15,7 @@ window.projectsHandler = projectsHandler;
 
 export function createNewProjectBtn (){
     const newProjectBtn = document.querySelector('#new-project-btn');
+    newProjectBtn.textContent = "New Project"
 
     newProjectBtn.addEventListener('click', () => {
         if(document.querySelector('#new-project-wrapper')){
@@ -40,6 +43,7 @@ export function createNewProjectBtn (){
 
     const addProjectBtn = document.createElement('button');
     addProjectBtn.id = "add-new-project";
+    addProjectBtn.textContent = "Add";
     container.appendChild(addProjectBtn);
 
     const descriptionInput = makeInput("Description: ", "text", "new-project-description", 
@@ -80,6 +84,10 @@ export function addProjectOnMenu(project) {
     const projectWrapper = document.createElement('div');
     projectWrapper.id = `${project.id}-btn-wrapper`;
     projectWrapper.classList.add('project-btn-wrapper');
+    projectWrapper.addEventListener("click", () => {
+        projectState.currentProject = project.id;
+        renderProject(projectsHandler[projectState.currentProject]);
+})
 
     const projectMenu = document.querySelector('#project-menu');
     projectMenu.appendChild(projectWrapper);
@@ -114,9 +122,12 @@ export function addProjectOnMenu(project) {
 }
 
 export function deleteProjectBtn(project, projectWrapper) {
-    const deleteBtn = document.createElement('button');
+    const deleteBtn = document.createElement('img');
+    deleteBtn.src = bin;
+    deleteBtn.alt = "Delete";
     deleteBtn.setAttribute('name', `${project.id}`);
-    deleteBtn.id = `${project.id}-delete`
+    deleteBtn.id = `${project.id}-delete`;
+    deleteBtn.classList.add('menu-delete-btn');
 
     projectWrapper.appendChild(deleteBtn);
 
@@ -139,10 +150,12 @@ export function deleteProject (project, projectWrapper) {
 
     delete projectsHandler[project.id];
     
-    if(projectState.currentProject = project.id){
+    if(projectState.currentProject == project.id){
         projectState.currentProject = "";
     }
 
+    updateProjectsOnLocalStorage();
+    updateCurrentState();
 }
 
 export function editProject(project) {
@@ -225,6 +238,7 @@ export function editProjectConfirm(project){
     addProjectOnMenu(project);
     renderProject(project);
     updateProjectsOnLocalStorage();
+    updateCurrentState();
 }
 
 function handleAddProject(){
@@ -258,5 +272,12 @@ function handleAddProject(){
     priority.value = "01";
     dueDate.value = "";
 
+        if(!document.querySelector('.project-container')){
+        projectState.currentProject = project.id;
+        renderProject(project);
+    }
+
     updateProjectsOnLocalStorage();
+    updateCurrentState();
+
 }
